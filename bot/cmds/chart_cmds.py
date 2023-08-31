@@ -1,4 +1,3 @@
-import traceback
 from datetime import datetime, timedelta
 
 import disnake
@@ -16,7 +15,6 @@ class CandlestickChartsCommands(commands.Cog):
         self.bot = bot
 
     @commands.slash_command(name="cd")
-    @commands.cooldown(rate=1, per=10, type=commands.BucketType.user)
     async def cd(
         self,
         inter: disnake.AppCmdInter,
@@ -52,9 +50,8 @@ class CandlestickChartsCommands(commands.Cog):
             )
 
         except Exception as e:
-            traceback.print_exc()
-            await ShowView().discord(inter, "cd", str(e), error=True)
-            return
+            return await ShowView().discord(inter, "cd", str(e), error=True)
+
         await ShowView().discord(
             inter, "cd", {"plots": fig.prepare_image()}, no_embed=True
         )
