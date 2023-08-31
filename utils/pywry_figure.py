@@ -20,17 +20,17 @@ class PyWryFigure(go.Figure):
                 # We send the figure to the backend to be displayed
                 return pywry_backend().send_figure(self)
             except Exception:
-                pass
+                """pass"""
 
         return pio.show(self, *args, **kwargs)
 
-    def pywry_write_image(
+    def pywry_image(
         self,
         filepath: Union[str, Path] = "plotly_image.png",
         scale: int = 1,
         timeout: int = 5,
-    ):
-        """Convert a Plotly figure to an image.
+    ) -> bytes:
+        """Return image as bytes or save to file.
 
         filepath : Union[str, Path], optional
             Filepath to save image to, by default "plotly_image.png"
@@ -38,8 +38,6 @@ class PyWryFigure(go.Figure):
             Image scale, by default 1
         timeout : int, optional
             Timeout for receiving the image, by default 5
-        to_bytes : bool, optional
-            Whether to return the image as bytes, by default False
         """
 
         if not isinstance(filepath, Path):
@@ -57,7 +55,6 @@ class PyWryFigure(go.Figure):
             )
 
         try:
-            # We send the figure to the backend to be converted to an image
             response = pywry_backend().figure_write_image(
                 self,
                 img_format=img_format,
@@ -72,7 +69,6 @@ class PyWryFigure(go.Figure):
 
         except Exception as e:
             print(e)
-            pass
 
     def prepare_image(
         self,
@@ -96,7 +92,7 @@ class PyWryFigure(go.Figure):
         filename_uuid = f"{filename}_{uuid_get()}" if add_uuid else filename
 
         plots_data = PlotsResponse(
-            filename=filename_uuid, image64=self.pywry_write_image(scale=1)
+            filename=filename_uuid, image64=self.pywry_image(scale=1)
         )
 
         return plots_data
