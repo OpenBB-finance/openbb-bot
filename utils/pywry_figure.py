@@ -1,3 +1,5 @@
+import traceback
+import uuid
 from pathlib import Path
 from typing import Union
 
@@ -5,7 +7,6 @@ import plotly.graph_objects as go
 import plotly.io as pio
 
 from models.api_models import PlotsResponse
-from utils.helpers import uuid_get
 
 from .backend import pywry_backend
 
@@ -20,7 +21,7 @@ class PyWryFigure(go.Figure):
                 # We send the figure to the backend to be displayed
                 return pywry_backend().send_figure(self)
             except Exception:
-                """pass"""
+                traceback.print_exc()
 
         return pio.show(self, *args, **kwargs)
 
@@ -67,8 +68,8 @@ class PyWryFigure(go.Figure):
 
             return response
 
-        except Exception as e:
-            print(e)
+        except Exception:
+            traceback.print_exc()
 
     def prepare_image(
         self,
@@ -89,10 +90,8 @@ class PyWryFigure(go.Figure):
         PlotsResponse
             PlotsResponse dataclass model with filename, image64
         """
-        filename_uuid = f"{filename}_{uuid_get()}" if add_uuid else filename
-
-        plots_data = PlotsResponse(
-            filename=filename_uuid, image64=self.pywry_image(scale=1)
+        filename_uuid = (
+            f"{filename}_{str(uuid.uuid4()).replace('-', '')}" if add_uuid else filename
         )
 
-        return plots_data
+        return PlotsResponse(filename=filename_uuid, image64=self.pywry_image(scale=1))

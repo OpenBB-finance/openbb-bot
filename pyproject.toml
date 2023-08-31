@@ -10,10 +10,8 @@ uvicorn = {extras = ["standard"], version = "^0.22"}
 fastapi = "^0.100"
 pydantic = "<2.0.0"
 disnake = "^2.4.0"
-redis = "^5.0.0b4"
-rq = "^1.10.1"
-pybase64 = "^1.2.1"
-black = "^22.3.0"
+black = "^23.7.0"
+ruff = "^0.0.286"
 pywry = "^0.5.14"
 plotly = "^5.16.1"
 

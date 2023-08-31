@@ -58,14 +58,13 @@ class Backend(PyWry):
         self.check_backend()
         title = fig.layout.title.text if fig.layout.title else "Plotly Figure"
 
-        json_data = json.loads(fig.to_json())
-
-        outgoing = dict(
-            html=self.get_plotly_html(),
-            json_data=json_data,
-            title=title,
+        self.send_outgoing(
+            dict(
+                html=self.get_plotly_html(),
+                json_data=json.loads(fig.to_json()),
+                title=title,
+            )
         )
-        self.send_outgoing(outgoing)
 
     def figure_write_image(
         self,

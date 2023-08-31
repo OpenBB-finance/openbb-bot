@@ -3,7 +3,6 @@ import io
 import re
 
 import disnake
-import ujson
 
 from bot.config import settings as cfg
 from models.api_models import MainModel
@@ -35,6 +34,7 @@ class ShowView:
 
         try:
             data = MainModel(**data)
+
             embed = disnake.Embed(
                 title=data.title, colour=cfg.COLOR, description=data.description
             )
@@ -76,7 +76,6 @@ class ShowView:
 
             return await inter.send(embed=embed)
         except Exception as e:
-            print(e)
             raise Exception("No data Found") from e
 
     async def discord(
@@ -104,12 +103,11 @@ class ShowView:
         """
         try:
             if error:
-                raise Exception(ujson.loads(data)["exception"])
+                raise Exception(data)
 
             await self.create_response(inter, data, no_embed)
 
         except Exception as e:
-            print(str(e).replace("|", "-"))
             try:
                 error_msg = str(e).replace("\n", "")
                 error_str = re.search(

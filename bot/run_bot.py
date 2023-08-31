@@ -2,8 +2,8 @@ import asyncio
 from pathlib import Path
 
 import disnake
-from disnake.ext import commands
-from fastapi import APIRouter  # type: ignore
+from disnake.ext import commands  # type: ignore
+from fastapi import APIRouter
 
 from bot.config import settings as cfg
 
@@ -21,15 +21,12 @@ class OBB_Bot(commands.InteractionBot):
     def load_all_extensions(self, folder: str) -> None:
         folder_path = Path(__file__).parent.joinpath(folder).resolve()
 
-        print(f"Loading extensions from {folder_path}")
         for path in folder_path.glob("*.py"):
-            print(".".join(path.relative_to(cfg.API_PATH).parts)[:-3])
             self.load_extension(".".join(path.relative_to(cfg.API_PATH).parts)[:-3])
 
 
 router = APIRouter(
     prefix="/v1/discord",
-    tags=["Discord Bot"],
     responses={404: {"description": "Not found"}},
     include_in_schema=False,
 )
