@@ -1,0 +1,55 @@
+[tool.poetry]
+name = "OpenBB Bots-Discord"
+version = "1.07"
+description = "Discord-Bot for OpenBB Bot-Platform"
+authors = ["teh_coderer <me@tehcoderer.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.8"
+uvicorn = {extras = ["standard"], version = "^0.22"}
+fastapi = "^0.100"
+pydantic = "<2.0.0"
+disnake = "^2.4.0"
+redis = "^5.0.0b4"
+rq = "^1.10.1"
+pybase64 = "^1.2.1"
+black = "^22.3.0"
+pywry = "^0.5.14"
+plotly = "^5.16.1"
+
+
+[tool.poetry.dev-dependencies]
+
+[build-system]
+requires = ["poetry-core>=1.9.0"]
+build-backend = "poetry.core.masonry.api"
+
+
+[tool.ruff]
+line-length = 122
+target-version = "py38"
+# This is an introductory addition of ruff. We should look to adding:
+# D: pydocstyle, PD: pandas-vet
+# All options here: https://github.com/charliermarsh/ruff#supported-rules
+select = ["E", "W", "F", "Q", "S", "UP", "I", "PLC", "PLE", "PLR", "PLW", "SIM", "T20"]
+# These ignores should be seen as temporary solutions to problems that will NEED fixed
+ignore = ["PLR2004", "PLR0913", "PLR0915"]
+
+[tool.ruff.per-file-ignores]
+"tests/*" = ["S101"]
+
+[tool.ruff.flake8-import-conventions.aliases]
+"matplotlib.pyplot" = "plt"
+numpy = "np"
+pandas = "pd"
+seaborn = "sns"
+
+[tool.ruff.isort]
+combine-as-imports = true
+force-wrap-aliases = true
+
+[tool.ruff.pylint]
+max-args=8
+max-branches=25
+max-returns=9
+max-statements=30
