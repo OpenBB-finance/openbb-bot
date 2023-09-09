@@ -7,7 +7,7 @@ authors = ["teh_coderer <me@tehcoderer.com>"]
 [tool.poetry.dependencies]
 python = ">=3.8,<3.12"
 disnake = "^2.4.0"
-pywry = "^0.5.14"
+pywry = "^0.6.0"
 plotly = "^5.16.1"
 openbb = "^4.0.0a0"
 
