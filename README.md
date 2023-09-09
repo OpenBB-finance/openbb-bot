@@ -43,12 +43,12 @@ async def command_name(
     inter: disnake.AppCmdInter,
     ticker: str,
 ):
-    """Description of the command. (This shows up in the help command)
+    """Description of the command. (Displayed in slash command description)
 
     ** We add the parameters here and describe them so they show in slash command help.
     Parameters
     -----------
-    ticker: The ticker of the stock you want to get the option chain for.
+    ticker: Stock ticker
     """
     ticker = ticker.upper()
     params = {
