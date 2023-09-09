@@ -18,7 +18,7 @@ poetry install
 3. Run the bot
 
 ```bash
-uvicorn bot.main:app --reload
+uvicorn main:app --reload
 ```
 
 ## How to make custom commands for the bot
