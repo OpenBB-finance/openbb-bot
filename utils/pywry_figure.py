@@ -1,7 +1,7 @@
 import traceback
 import uuid
 from pathlib import Path
-from typing import Union
+from typing import Union, overload
 
 import plotly.graph_objects as go
 import plotly.io as pio
@@ -24,6 +24,24 @@ class PyWryFigure(go.Figure):
                 traceback.print_exc()
 
         return pio.show(self, *args, **kwargs)
+
+    @overload
+    def update(self, *args, **kwargs) -> "PyWryFigure":
+        pass
+
+    def update(self, *args, **kwargs) -> "PyWryFigure":
+        super().update(*args, **kwargs)
+
+        return self
+
+    @overload
+    def update_layout(self, *args, **kwargs) -> "PyWryFigure":
+        pass
+
+    def update_layout(self, *args, **kwargs) -> "PyWryFigure":
+        super().update_layout(*args, **kwargs)
+
+        return self
 
     def pywry_image(
         self,

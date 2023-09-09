@@ -1,26 +1,10 @@
 import traceback
-from datetime import datetime, timedelta
 
 import disnake
 from disnake.ext import commands
-from openbb import obb
 
+from bot.helpers import chart_response
 from bot.showview import ShowView
-from utils.pywry_figure import PyWryFigure
-
-
-def candlestick_chart(params: dict, title: str) -> PyWryFigure:
-    fig: PyWryFigure = PyWryFigure().update(obb.stocks.load(**params).chart.content)
-
-    fig.update_layout(
-        title=dict(text=title, x=0.5),
-        margin=dict(l=20, r=20, t=40, b=20),
-        width=900,
-        height=600,
-        xaxis=dict(tick0=0.5, tickangle=0),
-    )
-
-    return fig
 
 
 class CandlestickChartsCommands(commands.Cog):
@@ -41,19 +25,11 @@ class CandlestickChartsCommands(commands.Cog):
         -----------
         ticker: Stock Ticker
         """
-        params = {
-            "symbol": ticker.upper(),
-            "start_date": (datetime.now() - timedelta(days=200)).strftime("%Y-%m-%d"),
-            "end_date": datetime.now().strftime("%Y-%m-%d"),
-            "interval": "1day",
-            "chart": True,
-        }
 
         try:
             await inter.response.defer()
 
-            fig = candlestick_chart(params, f"{ticker.upper()} Daily")
-            response = {"plots": fig.prepare_image()}
+            response = chart_response(ticker, "1day", 200)
 
         except Exception as e:
             traceback.print_exc()
@@ -73,19 +49,11 @@ class CandlestickChartsCommands(commands.Cog):
         -----------
         ticker: Stock Ticker
         """
-        params = {
-            "symbol": ticker.upper(),
-            "start_date": (datetime.now() - timedelta(days=2)).strftime("%Y-%m-%d"),
-            "end_date": datetime.now().strftime("%Y-%m-%d"),
-            "interval": "5min",
-            "chart": True,
-        }
 
         try:
             await inter.response.defer()
 
-            fig = candlestick_chart(params, f"{ticker.upper()} 5min")
-            response = {"plots": fig.prepare_image()}
+            response = chart_response(ticker, "5min", 4)
 
         except Exception as e:
             traceback.print_exc()
@@ -105,19 +73,10 @@ class CandlestickChartsCommands(commands.Cog):
         -----------
         ticker: Stock Ticker
         """
-        params = {
-            "symbol": ticker.upper(),
-            "start_date": (datetime.now() - timedelta(days=2)).strftime("%Y-%m-%d"),
-            "end_date": datetime.now().strftime("%Y-%m-%d"),
-            "interval": "15min",
-            "chart": True,
-        }
-
         try:
             await inter.response.defer()
 
-            fig = candlestick_chart(params, f"{ticker.upper()} 15min")
-            response = {"plots": fig.prepare_image()}
+            response = chart_response(ticker, "15min", 4)
 
         except Exception as e:
             traceback.print_exc()

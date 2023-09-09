@@ -22,7 +22,9 @@ class OBB_Bot(commands.InteractionBot):
         folder_path = Path(__file__).parent.joinpath(folder).resolve()
 
         for path in folder_path.glob("*.py"):
-            self.load_extension(".".join(path.relative_to(cfg.API_PATH).parts)[:-3])
+            self.load_extension(
+                ".".join(path.relative_to(cfg.API_PATH).parts).removesuffix(".py")
+            )
 
 
 router = APIRouter(
