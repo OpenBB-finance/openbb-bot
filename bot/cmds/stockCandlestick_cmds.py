@@ -6,9 +6,7 @@ import disnake
 from disnake.ext import commands
 from datetime import datetime, timedelta
 
-from bot.helpers import chart_response
 from bot.showview import ShowView
-from models.api_models import MainModel
 from utils.pywry_figure import PyWryFigure
 
 
@@ -50,7 +48,7 @@ class CandlestickChartsCommands(commands.Cog):
 
             # Pre-processing of parameters
             ticker = ticker.upper()
-            
+
             params = {
                 "symbol": ticker,
                 "provider": provider,
