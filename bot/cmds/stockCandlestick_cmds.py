@@ -32,27 +32,25 @@ class CandlestickChartsCommands(commands.Cog):
             default="1day",
         ),
         days: int = 200,
-        provider: str = commands.Param(
-            choices=[
-                "fmp",
-                "polygon",
-                "intrinio"
-            ],
-            default="fmp",
-        ),
     ):
         """Shows a daily candlestick chart for the ticker provided.
 
         Parameters
         -----------
         ticker: Stock Ticker
+        interval: Select whether to show 1day, 15min, or 5min intervals
+        days: Number of days in the past to show
         """
 
         try:
             await inter.response.defer()
 
+            # Hardcoded parameters
+            provider = "fmp" # can also be 'polygon' or 'intrinio'
+
             # Pre-processing of parameters
-            ticker = ticker.upper()            
+            ticker = ticker.upper()
+            
             params = {
                 "symbol": ticker,
                 "provider": provider,
