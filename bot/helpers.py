@@ -60,6 +60,8 @@ def chart_response(ticker: str, interval: str, days: int = 0) -> MainModel:
         .update(obb.stocks.load(**params).chart.content)
         .update_layout(
             margin=dict(l=80, r=10, t=40, b=20),
+            paper_bgcolor="#111111",
+            plot_bgcolor="rgba(0,0,0,0)",
             height=762,
             width=1430,
             title=dict(text=title, x=0.5),
