@@ -67,7 +67,7 @@ def chart_response(ticker: str, interval: str, days: int = 0) -> MainModel:
         )
     )
 
-    y_min, y_max = fig.data[0].low.min(), fig.data[0].high.max()
+    y_min, y_max = min(fig.data[0].low), max(fig.data[0].high)
     y_range = y_max - y_min
     y_min -= y_range * 0.2
     y_max += y_range * 0.08

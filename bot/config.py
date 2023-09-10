@@ -18,11 +18,8 @@ class Settings(BaseSettings):
     AUTHOR_URL: str = ""
     AUTHOR_ICON_URL: str = ""
 
-    # API Keys
-    FMP_API_KEY: str = ""
-    POLYGON_API_KEY: str = ""
-    FRED_API_KEY: str = ""
-    BENZINGA_API_KEY: str = ""
+    # Get OpenBB Hub PAT from https://my.openbb.co/app/sdk/pat
+    OPENBB_HUB_PAT: str = ""
 
     class Config:
         env_file = ".env"
