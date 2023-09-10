@@ -1,21 +1,45 @@
-# Bots
+# OpenBB Bot - Discord
 
-OpennBB Bots Framework using OpenBB SDK and [Disnake](
-    https://github.com/DisnakeDev/disnake
-)
+The [OpenBB Bot](http://my.openbb.co/app/bot) is a chatting bot that retrieves financial data on Discord and Telegram.
 
-## How to run the bot
+If you want to use our hosted version which is 100% free, go to http://my.openbb.co/app/bot.
 
-1. Update and rename the `.env.example` file to .env
+Otherwise, the remainder of this document will explain how you can self-host our Discord bot.
 
-2. Install the requirements
+We have open source our framework so that users are able to build their own Discord bots. We are relying on the [OpenBB Platform](HTTP://my.openbb.co/app.sdk) and [Disnake](https://github.com/DisnakeDev/disnake).
+
+## Add your own OpenBB Bot to your server of interest
+
+1. Go to https://discord.com/developers/applications
+2. Click on "New Application"
+3. Select a name for the application and agree to the ToS
+4. Add an image so that you can easily recognize the bot on Discord, and save changes
+5. On the "Settings" sidebar, go to "OAuth2"
+6. Copy the ClientID on that page
+7. Go to https://discord.com/oauth2/authorize?client_id=<CLIENTID>&scope=bot and replace `<CLIENTID>` by the one you copied in the previous step
+8. Make sure you select the Server you are interested in having the bot in
+9. On the "Settings" sidebar, go to "Bot"
+10. Click on "Reset Token" and copy the Token ID - this will be necessary when running the bot.
+
+## Configure your own OpenBB Bot
+
+1. Update and rename the `.env.example` file to `.env`
+2. In this `.env` file set `DISCORD_BOT_TOKEN` with the Token ID previously copied
+3. If you don't have an OpenBB Hub account, go to http://my.openbb.co 
+5. Once you do go the [OpenBB SDK - PAT (personal access token) page](http://my.openbb.co/app/sdk/pat) and copy the PAT
+6. In the `.env` file set `OPENBB_HUB_PAT` with the PAT previously copied
+
+One of the reasons you rely on the OpenBB Hub PAT is that it manages all of your API keys on your behalf once you want to access data using OpenBB. So make sure you have your API keys set in http://my.openbb.co/sdk/api-keys.
+
+## Run your own OpenBB Bot
+
+1. Install the requirements
 
 ```bash
 poetry install
 ```
 
-
-3. Run the bot
+2. Run your own OpenBB Bot
 
 ```bash
 uvicorn main:app --reload
