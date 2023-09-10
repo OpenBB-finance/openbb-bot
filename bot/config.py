@@ -18,6 +18,12 @@ class Settings(BaseSettings):
     AUTHOR_URL: str = ""
     AUTHOR_ICON_URL: str = ""
 
+    # API Keys
+    FMP_API_KEY: str = ""
+    POLYGON_API_KEY: str = ""
+    FRED_API_KEY: str = ""
+    BENZINGA_API_KEY: str = ""
+
     class Config:
         env_file = ".env"
         env_file_encoding = "utf-8"

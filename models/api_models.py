@@ -23,7 +23,21 @@ class PlotsResponse(BaseModel):
 
 
 class EmbedField(BaseModel):
-    """Embed fields for Discord"""
+    """Embed fields for Discord
+
+    title : str, optional
+        Title of the embed field, by default ""
+    description : str, optional
+        Description of the embed field, by default ""
+    inline : bool, optional
+        Whether the embed field is inline, by default False
+    footer : str, optional
+        Footer of the embed field, by default ""
+    thumbnail : str, optional
+        Thumbnail of the embed field, by default ""
+    homepage : str, optional
+        Homepage of the embed field, by default ""
+    """
 
     title: Optional[str] = ""
     description: Optional[str] = ""
