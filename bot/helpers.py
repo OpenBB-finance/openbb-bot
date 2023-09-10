@@ -59,10 +59,10 @@ def chart_response(ticker: str, interval: str, days: int = 0) -> MainModel:
         PyWryFigure()
         .update(obb.stocks.load(**params).chart.content)
         .update_layout(
+            margin=dict(l=80, r=10, t=40, b=20),
+            height=762,
+            width=1430,
             title=dict(text=title, x=0.5),
-            margin=dict(l=20, r=20, t=40, b=20),
-            width=900,
-            height=600,
             xaxis=dict(tick0=0.5, tickangle=0),
         )
     )

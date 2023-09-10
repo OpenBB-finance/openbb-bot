@@ -1,3 +1,5 @@
+import base64
+import io
 import traceback
 import uuid
 from pathlib import Path
@@ -5,10 +7,13 @@ from typing import Union, overload
 
 import plotly.graph_objects as go
 import plotly.io as pio
+from PIL import Image
 
 from models.api_models import PlotsResponse
 
 from .backend import pywry_backend
+
+BOT_PATH = (Path(__file__).parent.parent / "bot").resolve()
 
 
 class PyWryFigure(go.Figure):
@@ -112,4 +117,36 @@ class PyWryFigure(go.Figure):
             f"{filename}_{str(uuid.uuid4()).replace('-', '')}" if add_uuid else filename
         )
 
-        return PlotsResponse(filename=filename_uuid, image64=self.pywry_image(scale=1))
+        fig_img = Image.open(io.BytesIO(base64.b64decode(self.pywry_image(scale=1))))
+        im_bg = Image.open(BOT_PATH / "assets" / "bg_dark_charts.png")
+
+        # make new transparent image
+        new_img = Image.new("RGBA", im_bg.size, (255, 255, 255, 0))
+
+        # paste background on it
+        new_img.paste(im_bg, (0, 0), im_bg)
+
+        # Paste fig onto background img
+        x1 = int(0.5 * new_img.size[0]) - int(0.5 * fig_img.size[0])
+        y1 = int(0.5 * new_img.size[1]) - int(0.5 * fig_img.size[1])
+        x2 = int(0.5 * new_img.size[0]) + int(0.5 * fig_img.size[0])
+        y2 = int(0.5 * new_img.size[1]) + int(0.5 * fig_img.size[1])
+
+        new_img.paste(fig_img, box=(x1, y1 - 15, x2, y2 - 15))
+
+        paste = Image.open(BOT_PATH / "assets" / "bg_charts_paste.png")
+        new_img.paste(paste, (0, 0), paste)
+
+        fig_img.close()
+        im_bg.close()
+        paste.close()
+
+        imagebytes = io.BytesIO()
+        new_img.save(imagebytes, "PNG")
+        new_img.close()
+        imagebytes.seek(0)
+
+        return PlotsResponse(
+            filename=filename_uuid,
+            image64=base64.b64encode(imagebytes.read()).decode("utf-8"),
+        )
