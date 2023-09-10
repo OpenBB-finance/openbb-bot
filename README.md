@@ -1,4 +1,4 @@
-# OpenBB Bot - Discord
+# OpenBB Bot - Discord Edition
 
 The [OpenBB Bot](http://my.openbb.co/app/bot) is a chatting bot that retrieves financial data on Discord and Telegram.
 
@@ -51,7 +51,7 @@ Create a new file or edit a pre-existing file in the folder: `bot/cmds`.
   
 Let's assume that we create a new file called `stockCandlestick_cmds.py`. We will go step-by-step over what this file should contain:
 
-1. Import all python libraries necessary
+1. Import all necessary python libraries
 
 ```python
 import traceback
@@ -62,9 +62,7 @@ import disnake
 from disnake.ext import commands
 from datetime import datetime, timedelta
 
-from bot.helpers import chart_response
 from bot.showview import ShowView
-from models.api_models import MainModel
 from utils.pywry_figure import PyWryFigure
 ```
 
@@ -75,106 +73,110 @@ class CandlestickChartsCommands(commands.Cog):
     """Candlestick Charting commands."""
 ```
 
-3. 
+3. Within that class, initialize the class as follows
 
 ```python
-import traceback
-
-from openbb import obb
-
-import disnake
-from disnake.ext import commands
-from datetime import datetime, timedelta
-
-from bot.helpers import chart_response
-from bot.showview import ShowView
-from models.api_models import MainModel
-from utils.pywry_figure import PyWryFigure
-
-class CandlestickChartsCommands(commands.Cog):
-    """Candlestick Charting commands."""
-
-    def __init__(self, bot: commands.Bot):
+def __init__(self, bot: commands.Bot):
         self.bot = bot
+```
 
-    @commands.slash_command(name="candle")
-    async def candle(
-        self,
-        inter: disnake.AppCmdInter,
-        ticker: str,
-        interval: str = commands.Param(
-            choices=[
-                "1day",
-                "15min",
-                "5min",
-            ],
-            default="1day",
-        ),
-        days: int = 200,
-    ):
-        """Shows a daily candlestick chart for the ticker provided.
+4. Within that class create a command. An example with several comments to explain the structure follows
 
-        Parameters
-        -----------
-        ticker: Stock Ticker
-        interval: Select whether to show 1day, 15min, or 5min intervals
-        days: Number of days in the past to show
-        """
+```python
+# Ensure that the name and the method name is the same
+# this will be what the user utilizes to invoke the command from Discord
+@commands.slash_command(name="candle")
+async def candle(
+    self,  # inherits from the class
+    inter: disnake.AppCmdInter,  # comes from disnake and is used to run the command
+    # custom commands
+    ticker: str,  # user can type anything but this parameter is required
+    interval: str = commands.Param(  # user can only select between '1day', '15min' and '5min'
+        choices=[
+            "1day",
+            "15min",
+            "5min",
+        ],
+        default="1day",  # if the user doesn't select any, by default '1day' is set
+    ),
+    days: int = 200,  # user has to select an integer, by default 200 is selected
+):
+    """Shows a daily candlestick chart for the ticker provided.
 
-        try:
-            await inter.response.defer()
+    Parameters
+    -----------
+    ticker: Stock Ticker
+    interval: Select whether to show 1day, 15min, or 5min intervals
+    days: Number of days in the past to show
+    """
 
-            # Hardcoded parameters
-            provider = "fmp" # can also be 'polygon' or 'intrinio'
+    # Ensure the docstring above is added
+    # so that the users know what each command and parameter corresponds to.
 
-            # Pre-processing of parameters
-            ticker = ticker.upper()
-            
-            params = {
-                "symbol": ticker,
-                "provider": provider,
-                "start_date":  (datetime.now() - timedelta(days=days)).strftime("%Y-%m-%d"),
-                "end_date": datetime.now().strftime("%Y-%m-%d"),
-                "interval": interval,
-                "chart": True,
-            }
+    try:
+        # Ensures the data can be retrieved with disnake
+        await inter.response.defer()
 
-            # Get the data
-            data = obb.stocks.load(**params).chart.content
+        # Handle hardcoded parameters, e.g. data provider coming from OpenBB
+        provider = "fmp" # can also be 'polygon' or 'intrinio'
 
-            # Format for display
-            title = f"{ticker} {interval.replace('1day', 'Daily')}"
+        # Pre-processing of parameters, in case it needs to be processed before calling OpenBB
+        ticker = ticker.upper()
+        params = {
+            "symbol": ticker,
+            "provider": provider,
+            "start_date":  (datetime.now() - timedelta(days=days)).strftime("%Y-%m-%d"),
+            "end_date": datetime.now().strftime("%Y-%m-%d"),
+            "interval": interval,
+            "chart": True,
+        }
 
-            fig = (
-                PyWryFigure()
-                .update(data)
-                .update_layout(
-                    margin=dict(l=80, r=10, t=40, b=20),
-                    paper_bgcolor="#111111",
-                    plot_bgcolor="rgba(0,0,0,0)",
-                    height=762,
-                    width=1430,
-                    title=dict(text=title, x=0.5),
-                    xaxis=dict(tick0=0.5, tickangle=0),
-                )
+        # Get the data from OpenBB
+        data = obb.stocks.load(**params).chart.content
+
+        # Format this data to be displayed on Discord
+        title = f"{ticker} {interval.replace('1day', 'Daily')}"
+
+        fig = (
+            PyWryFigure()
+            .update(data)
+            .update_layout(
+                margin=dict(l=80, r=10, t=40, b=20),
+                paper_bgcolor="#111111",
+                plot_bgcolor="rgba(0,0,0,0)",
+                height=762,
+                width=1430,
+                title=dict(text=title, x=0.5),
+                xaxis=dict(tick0=0.5, tickangle=0),
             )
+        )
 
-            y_min, y_max = min(fig.data[0].low), max(fig.data[0].high)
-            y_range = y_max - y_min
-            y_min -= y_range * 0.2
-            y_max += y_range * 0.08
+        y_min, y_max = min(fig.data[0].low), max(fig.data[0].high)
+        y_range = y_max - y_min
+        y_min -= y_range * 0.2
+        y_max += y_range * 0.08
 
-            fig.update_layout(yaxis=dict(range=[y_min, y_max], autorange=False))
+        fig.update_layout(yaxis=dict(range=[y_min, y_max], autorange=False))
 
-            response: dict = {"plots": fig.prepare_image()}
+        # The response must be a Dictionary with key "plots", "embeds" or "images_list"
+        response: dict = {"plots": fig.prepare_image()}
 
-        except Exception as e:
-            traceback.print_exc()
-            return await ShowView().discord(inter, "candle", str(e), error=True)
+    except Exception as e:
+        # In case there's an exception we want the error to be printed in the user's console
+        traceback.print_exc()
+        # This returns the error as a string to the Discord so that the user can see what happened
+        # this is extremely useful when debugging
+        return await ShowView().discord(inter, "candle", str(e), error=True)
 
-        await ShowView().discord(inter, "candle", response, no_embed=True)
+    This handles the command rendering on Discord
+    await ShowView().discord(inter, "candle", response, no_embed=True)
+```
 
+5. Create as many commands per class as you wish.
 
+6. Finally, add a `setup` method that adds this class to the OpenBB Bot instance
+
+```python
 def setup(bot: commands.Bot):
     bot.add_cog(CandlestickChartsCommands(bot))
 ```
