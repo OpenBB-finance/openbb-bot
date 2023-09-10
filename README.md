@@ -172,9 +172,9 @@ async def candle(
     await ShowView().discord(inter, "candle", response, no_embed=True)
 ```
 
-5. Create as many commands per class as you wish.
+5. Within that class, create as many methods as you wish
 
-6. Finally, add a `setup` method that adds this class to the OpenBB Bot instance
+6. Finally, create a `setup` function that adds this class to the OpenBB Bot instance
 
 ```python
 def setup(bot: commands.Bot):
