@@ -8,6 +8,7 @@ from openbb import obb
 from bot.showview import ShowView
 from models.api_models import EmbedField
 
+from ..helpers import plot_df
 
 class DueDiligenceCommands(commands.Cog):
     """Due Diligence commands."""
@@ -41,6 +42,32 @@ class DueDiligenceCommands(commands.Cog):
 
             response = obb.stocks.fa.income(ticker, period=period)
 
+            df = response.to_dataframe().T
+            df_all = df[df.columns[-1]].to_frame()
+            data = df_all[[str(v).replace(".", "", 1).isdigit() for v in df_all[df_all.columns[0]].values]]
+
+            print(data)
+
+            fig = plot_df(
+                data,
+                fig_size=(620, (52 + (40 * len(data.index)))),
+                #col_width=[4, 2.4, 3],
+                #tbl_header=imps.PLT_TBL_HEADER,
+                #tbl_cells=imps.PLT_TBL_CELLS,
+                #font=imps.PLT_TBL_FONT,
+                #row_fill_color=imps.PLT_TBL_ROW_COLORS,
+                #paper_bgcolor="rgba(0, 0, 0, 0)",
+            )
+            fig.update_traces(
+                cells=(
+                    dict(
+                        align=["center", "right"],
+                        font=dict(color="white", size=12),
+                    )
+                )
+            )
+            
+            '''
             data = response.results[0].dict()
 
             embeds: List[EmbedField] = []
@@ -64,12 +91,15 @@ class DueDiligenceCommands(commands.Cog):
                         inline=True,
                     )
                 )
+            '''
 
         except Exception as e:
             traceback.print_exc()
             return await ShowView().discord(inter, "income", str(e), error=True)
 
-        await ShowView().discord(inter, "income", {"embeds": embeds})
+        # await ShowView().discord(inter, "income", {"embeds": embeds})
+
+        await ShowView().discord(inter, "income", {"title": "Income", "plots": fig})
 
 
 def setup(bot: commands.Bot):
