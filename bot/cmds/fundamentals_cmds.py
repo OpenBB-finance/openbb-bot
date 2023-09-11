@@ -85,15 +85,14 @@ class FundamentalsCommands(commands.Cog):
                         font_color.append("rgb(254,202,202)")
                     else:
                         font_color.append("white")
+                elif len(sval) > 9:
+                    font_color.append("rgb(0,136,204)")
+                elif len(sval) > 6:
+                    font_color.append("rgb(102,204,255)")
+                elif len(sval) > 3:
+                    font_color.append("rgb(204,238,255)")
                 else:
-                    if len(sval) > 9:
-                        font_color.append("rgb(0,136,204)")
-                    elif len(sval) > 6:
-                        font_color.append("rgb(102,204,255)")
-                    elif len(sval) > 3:
-                        font_color.append("rgb(204,238,255)")
-                    else:
-                        font_color.append("white")
+                    font_color.append("white")
 
             fig = self.plot_df(
                 data,
