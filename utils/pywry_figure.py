@@ -16,6 +16,31 @@ from .backend import pywry_backend
 BOT_PATH = (Path(__file__).parent.parent / "bot").resolve()
 
 
+def autocrop_image(image: Image.Image, border=0) -> Image.Image:
+    """Crop empty space from PIL image
+
+    Parameters
+    ----------
+    image : Image.Image
+        PIL image to crop
+    border : int, optional
+        scale border outwards, by default 0
+
+    Returns
+    -------
+    Image.Image
+        Cropped image
+    """
+    bbox = image.getbbox()
+    image = image.crop(bbox)
+    (width, height) = image.size
+    width += border * 2
+    height += border * 2
+    cropped_image = Image.new("RGBA", (width, height), (0, 0, 0, 0))
+    cropped_image.paste(image, (border, border))
+    return cropped_image
+
+
 class PyWryFigure(go.Figure):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -160,7 +185,16 @@ class PyWryFigure(go.Figure):
             f"{filename}_{str(uuid.uuid4()).replace('-', '')}" if add_uuid else filename
         )
 
+        image = autocrop_image(
+            Image.open(io.BytesIO(base64.b64decode(self.pywry_image(scale=2)))), 0
+        )
+
+        imagebytes = io.BytesIO()
+        image.save(imagebytes, "PNG")
+        image.close()
+        imagebytes.seek(0)
+
         return PlotsResponse(
             filename=filename_uuid,
-            image64=self.pywry_image(scale=2),
+            image64=base64.b64encode(imagebytes.read()).decode("utf-8"),
         )
