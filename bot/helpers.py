@@ -45,7 +45,7 @@ def numerize(num, round_decimal=2) -> str:
 
         num_str = f"{num:{string_fmt}}"
 
-        return f"{num_str}{' KMBTP'[magnitude]}".strip()
+        return f"{num_str}{' KMBTP'[magnitude]}{'' if magnitude else ' '}"
     if isinstance(num, (np.int64, int)):
         num = str(num)
     if num.lstrip("-").isdigit():
@@ -59,7 +59,7 @@ def numerize(num, round_decimal=2) -> str:
         string_fmt = f".{round_decimal}f"
         num_str = f"{num:{string_fmt}}"
 
-        return f"{num_str}{' KMBTP'[magnitude]}".strip()
+        return f"{num_str}{' KMBTP'[magnitude]}{'' if magnitude else ' '}"
     return num
 
 

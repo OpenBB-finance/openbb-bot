@@ -72,23 +72,11 @@ class FundamentalsCommands(commands.Cog):
             # Apply the replacements using a list comprehension
             data.index = [replacement_dict.get(i, i) for i in data.index]
 
-            # font_color = ["white", "rgb(0,136,204)"] * len(data.index)
-
             font_color = list()
             for val in data[data.columns[0]].values:
                 sval = str(val).split(".")[0]
-                font_color.append("white")
                 if "-" in sval:
                     sval = sval.replace("-", "")
-                    if len(sval) > 9:
-                        font_color.append("rgb(0,136,204)")
-                    elif len(sval) > 6:
-                        font_color.append("rgb(102,204,255)")
-                    elif len(sval) > 3:
-                        font_color.append("rgb(204,238,255)")
-                    else:
-                        font_color.append("white")
-                else:
                     if len(sval) > 9:
                         font_color.append("rgb(220,38,38)")
                     elif len(sval) > 6:
@@ -97,8 +85,15 @@ class FundamentalsCommands(commands.Cog):
                         font_color.append("rgb(254,202,202)")
                     else:
                         font_color.append("white")
-
-            print(font_color)
+                else:
+                    if len(sval) > 9:
+                        font_color.append("rgb(0,136,204)")
+                    elif len(sval) > 6:
+                        font_color.append("rgb(102,204,255)")
+                    elif len(sval) > 3:
+                        font_color.append("rgb(204,238,255)")
+                    else:
+                        font_color.append("white")
 
             fig = self.plot_df(
                 data,
@@ -107,7 +102,7 @@ class FundamentalsCommands(commands.Cog):
                 col_width=[8, 5],
                 nums_format=[data.columns[0]],
                 cell_align=["left", "right"],
-                cell_font_color=font_color,
+                cell_font_color=[font_color],
             )
 
         except Exception as e:
