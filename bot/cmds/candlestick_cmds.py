@@ -10,8 +10,8 @@ from bot.showview import ShowView
 from ..run_bot import OBB_Bot
 
 
-class CandlestickChartsCommands(commands.Cog):
-    """Candlestick Charting commands."""
+class candlestickCommands(commands.Cog):
+    """candlestick commands."""
 
     def __init__(self, bot: "OBB_Bot"):
         self.bot = bot
@@ -98,4 +98,4 @@ class CandlestickChartsCommands(commands.Cog):
 
 
 def setup(bot: "OBB_Bot"):
-    bot.add_cog(CandlestickChartsCommands(bot))
+    bot.add_cog(candlestickCommands(bot))
