@@ -150,3 +150,17 @@ class PyWryFigure(go.Figure):
             filename=filename_uuid,
             image64=base64.b64encode(imagebytes.read()).decode("utf-8"),
         )
+
+    def prepare_table(
+        self,
+        filename: str = "plots",
+        add_uuid: bool = True,
+    ) -> PlotsResponse:
+        filename_uuid = (
+            f"{filename}_{str(uuid.uuid4()).replace('-', '')}" if add_uuid else filename
+        )
+
+        return PlotsResponse(
+            filename=filename_uuid,
+            image64=self.pywry_image(scale=2),
+        )

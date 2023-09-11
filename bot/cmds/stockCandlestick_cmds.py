@@ -1,20 +1,21 @@
 import traceback
-
-from openbb import obb
+from datetime import datetime, timedelta
 
 import disnake
 from disnake.ext import commands
-from datetime import datetime, timedelta
+from openbb import obb
 
 from bot.showview import ShowView
-from utils.pywry_figure import PyWryFigure
+
+from ..run_bot import OBB_Bot
 
 
 class CandlestickChartsCommands(commands.Cog):
     """Candlestick Charting commands."""
 
-    def __init__(self, bot: commands.Bot):
+    def __init__(self, bot: "OBB_Bot"):
         self.bot = bot
+        self.plot = bot.plot
 
     @commands.slash_command(name="candle")
     async def candle(
@@ -44,7 +45,7 @@ class CandlestickChartsCommands(commands.Cog):
             await inter.response.defer()
 
             # Hardcoded parameters
-            provider = "fmp" # can also be 'polygon' or 'intrinio'
+            provider = "fmp"  # can also be 'polygon' or 'intrinio'
 
             # Pre-processing of parameters
             ticker = ticker.upper()
@@ -52,7 +53,9 @@ class CandlestickChartsCommands(commands.Cog):
             params = {
                 "symbol": ticker,
                 "provider": provider,
-                "start_date":  (datetime.now() - timedelta(days=days)).strftime("%Y-%m-%d"),
+                "start_date": (datetime.now() - timedelta(days=days)).strftime(
+                    "%Y-%m-%d"
+                ),
                 "end_date": datetime.now().strftime("%Y-%m-%d"),
                 "interval": interval,
                 "chart": True,
@@ -65,7 +68,7 @@ class CandlestickChartsCommands(commands.Cog):
             title = f"{ticker} {interval.replace('1day', 'Daily')}"
 
             fig = (
-                PyWryFigure()
+                self.plot()
                 .update(data)
                 .update_layout(
                     margin=dict(l=80, r=10, t=40, b=20),
@@ -94,5 +97,5 @@ class CandlestickChartsCommands(commands.Cog):
         await ShowView().discord(inter, "candle", response, no_embed=True)
 
 
-def setup(bot: commands.Bot):
+def setup(bot: "OBB_Bot"):
     bot.add_cog(CandlestickChartsCommands(bot))

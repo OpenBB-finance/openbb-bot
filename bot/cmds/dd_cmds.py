@@ -1,20 +1,20 @@
 import traceback
-from typing import List
 
 import disnake
 from disnake.ext import commands
 from openbb import obb
 
 from bot.showview import ShowView
-from models.api_models import EmbedField
 
-from ..helpers import plot_df
+from ..run_bot import OBB_Bot
+
 
 class DueDiligenceCommands(commands.Cog):
     """Due Diligence commands."""
 
-    def __init__(self, bot: commands.Bot):
+    def __init__(self, bot: "OBB_Bot"):
         self.bot = bot
+        self.plot_df = bot.plot_df
 
     @commands.slash_command(name="income")
     async def income(
@@ -40,67 +40,36 @@ class DueDiligenceCommands(commands.Cog):
         try:
             await inter.response.defer()
 
-            response = obb.stocks.fa.income(ticker, period=period)
+            df = (
+                obb.stocks.fa.income(ticker, period=period)
+                .to_dataframe()
+                .drop(["cik", "calendar_year"], axis=1)
+            )
+            df.columns = df.columns.str.replace("_", " ").str.title()
 
-            df = response.to_dataframe().T
-            df_all = df[df.columns[-1]].to_frame()
-            data = df_all[[str(v).replace(".", "", 1).isdigit() for v in df_all[df_all.columns[0]].values]]
+            df = df.tail(1).T
+            df.columns = [d.strftime("%Y-%m-%d") for d in df.columns]
+            data = df[
+                [str(v).replace(".", "", 1).isdigit() for v in df[df.columns[0]].values]
+            ]
 
-            print(data)
-
-            fig = plot_df(
+            fig = self.plot_df(
                 data,
-                fig_size=(620, (52 + (40 * len(data.index)))),
-                #col_width=[4, 2.4, 3],
-                #tbl_header=imps.PLT_TBL_HEADER,
-                #tbl_cells=imps.PLT_TBL_CELLS,
-                #font=imps.PLT_TBL_FONT,
-                #row_fill_color=imps.PLT_TBL_ROW_COLORS,
-                #paper_bgcolor="rgba(0, 0, 0, 0)",
+                fig_size=(650, (30 + (40 * len(data.index)))),
+                print_index=True,
+                col_width=[7, 5],
+                nums_format=[data.columns[0]],
+                cell_align=["left", "right"],
             )
-            fig.update_traces(
-                cells=(
-                    dict(
-                        align=["center", "right"],
-                        font=dict(color="white", size=12),
-                    )
-                )
-            )
-            
-            '''
-            data = response.results[0].dict()
-
-            embeds: List[EmbedField] = []
-
-            for i, (key, value) in enumerate(data.items()):
-                title = key.replace("_", " ").title()
-                if i % 3 == 0:
-                    embeds.append(
-                        EmbedField(
-                            title="_ _",
-                            description="_ _",
-                            inline=False,
-                        )
-                    )
-                embeds.append(
-                    EmbedField(
-                        title=title,
-                        description=f"{value:,.3f}"
-                        if isinstance(value, float)
-                        else str(value),
-                        inline=True,
-                    )
-                )
-            '''
 
         except Exception as e:
             traceback.print_exc()
             return await ShowView().discord(inter, "income", str(e), error=True)
 
-        # await ShowView().discord(inter, "income", {"embeds": embeds})
+        await ShowView().discord(
+            inter, "income", {"title": "Income", "plots": fig.prepare_table()}
+        )
 
-        await ShowView().discord(inter, "income", {"title": "Income", "plots": fig})
 
-
-def setup(bot: commands.Bot):
+def setup(bot: "OBB_Bot"):
     bot.add_cog(DueDiligenceCommands(bot))

@@ -6,6 +6,8 @@ from disnake.ext import commands  # type: ignore
 from fastapi import APIRouter
 
 from bot.config import settings as cfg
+from bot.helpers import plot_df
+from utils.pywry_figure import PyWryFigure
 
 
 class OBB_Bot(commands.InteractionBot):
@@ -17,6 +19,7 @@ class OBB_Bot(commands.InteractionBot):
             test_guilds=cfg.SLASH_TESTING_SERVERS,
             **kwargs,
         )
+        self.plot_df = plot_df
 
     def load_all_extensions(self, folder: str) -> None:
         folder_path = Path(__file__).parent.joinpath(folder).resolve()
@@ -25,6 +28,11 @@ class OBB_Bot(commands.InteractionBot):
             self.load_extension(
                 ".".join(path.relative_to(cfg.API_PATH).parts).removesuffix(".py")
             )
+
+    @staticmethod
+    def plot() -> PyWryFigure:
+        """Get a PyWryFigure object."""
+        return PyWryFigure()
 
 
 router = APIRouter(
