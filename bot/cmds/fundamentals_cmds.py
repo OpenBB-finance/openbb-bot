@@ -78,19 +78,19 @@ class FundamentalsCommands(commands.Cog):
                 if "-" in sval:
                     sval = sval.replace("-", "")
                     if len(sval) > 9:
-                        font_color.append("rgb(220,38,38)")
-                    elif len(sval) > 6:
                         font_color.append("rgb(248,113,113)")
+                    elif len(sval) > 6:
+                        font_color.append("rgb(220,38,38)")
                     elif len(sval) > 3:
-                        font_color.append("rgb(254,202,202)")
+                        font_color.append("rgb(185,28,28)")
                     else:
                         font_color.append("white")
                 elif len(sval) > 9:
-                    font_color.append("rgb(0,136,204)")
+                    font_color.append("rgb(74,222,128)")
                 elif len(sval) > 6:
-                    font_color.append("rgb(102,204,255)")
+                    font_color.append("rgb(22,163,74)")
                 elif len(sval) > 3:
-                    font_color.append("rgb(204,238,255)")
+                    font_color.append("rgb(21,128,61)")
                 else:
                     font_color.append("white")
 
@@ -101,7 +101,7 @@ class FundamentalsCommands(commands.Cog):
                 col_width=[8, 5],
                 nums_format=[data.columns[0]],
                 cell_align=["left", "right"],
-                cell_font_color=[font_color],
+                cell_font_color=[["white"] * len(data), font_color],
             )
 
         except Exception as e:
@@ -111,7 +111,6 @@ class FundamentalsCommands(commands.Cog):
         await ShowView().discord(
             inter, "income", {"title": f"{ticker} Income", "plots": fig.prepare_table()}
         )
-
 
 def setup(bot: "OBB_Bot"):
     bot.add_cog(FundamentalsCommands(bot))
