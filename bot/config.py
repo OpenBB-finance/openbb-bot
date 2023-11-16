@@ -1,14 +1,15 @@
 from pathlib import Path
+from typing import ClassVar
 
 import disnake
 import disnake.http
-from pydantic import BaseSettings
+from pydantic_settings import BaseSettings
 
 
 class Settings(BaseSettings):
     # Paths
-    API_PATH = Path(__file__).parent.parent.resolve()
-    BOTS_PATH = Path(__file__).parent.resolve()
+    API_PATH: ClassVar[Path] = Path(__file__).parent.parent.resolve()
+    BOTS_PATH: ClassVar[Path] = Path(__file__).parent.resolve()
 
     # Bot Settings
     DISCORD_BOT_TOKEN: str

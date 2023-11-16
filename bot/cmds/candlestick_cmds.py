@@ -62,7 +62,7 @@ class candlestickCommands(commands.Cog):
             }
 
             # Get the data
-            data = obb.stocks.load(**params).chart.content
+            data = obb.equity.price.historical(**params).chart.content
 
             # Format for display
             title = f"{ticker} {interval.replace('1day', 'Daily')}"

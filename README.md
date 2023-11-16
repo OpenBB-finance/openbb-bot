@@ -25,7 +25,7 @@ We have open source our framework so that users are able to build their own Disc
 
 1. Update and rename the `.env.example` file to `.env`
 2. In this `.env` file set `DISCORD_BOT_TOKEN` with the Token ID previously copied
-3. If you don't have an OpenBB Hub account, go to http://my.openbb.co 
+3. If you don't have an OpenBB Hub account, go to http://my.openbb.co
 5. Once you do go the [OpenBB SDK - PAT (personal access token) page](http://my.openbb.co/app/sdk/pat) and copy the PAT
 6. In the `.env` file set `OPENBB_HUB_PAT` with the PAT previously copied
 
@@ -48,7 +48,7 @@ uvicorn main:app --reload
 ## How to make your own custom commands for the OpenBB Bot
 
 Create a new file or edit a pre-existing file in the folder: `bot/cmds`.
-  
+
 Let's assume that we create a new file called `stockCandlestick_cmds.py`. We will go step-by-step over what this file should contain:
 
 1. Import all necessary python libraries
@@ -132,7 +132,7 @@ async def candle(
         }
 
         # Get the data from OpenBB
-        data = obb.stocks.load(**params).chart.content
+        data = obb.equity.price.historical(**params).chart.content
 
         # Format this data to be displayed on Discord
         title = f"{ticker} {interval.replace('1day', 'Daily')}"

@@ -43,7 +43,7 @@ class FundamentalsCommands(commands.Cog):
             ticker = ticker.upper()
 
             df = (
-                obb.stocks.fa.income(ticker, period=period)
+                obb.equity.fundamental.income(ticker, period=period)
                 .to_dataframe()
                 .drop(["cik", "calendar_year"], axis=1)
             )
@@ -140,7 +140,7 @@ class FundamentalsCommands(commands.Cog):
             ticker = ticker.upper()
 
             df = (
-                obb.stocks.fa.cash(ticker, period=period)
+                obb.equity.fundamental.cash(ticker, period=period)
                 .to_dataframe()
                 .drop(["cik", "calendar_year"], axis=1)
             )
@@ -197,7 +197,7 @@ class FundamentalsCommands(commands.Cog):
         await ShowView().discord(
             inter, "cashflow",
             {
-                "title": f"{ticker} Cashflow", 
+                "title": f"{ticker} Cashflow",
                 "plots": fig.prepare_table(),
             }
         )
@@ -229,7 +229,7 @@ class FundamentalsCommands(commands.Cog):
             ticker = ticker.upper()
 
             df = (
-                obb.stocks.fa.balance(ticker, period=period)
+                obb.equity.fundamental.balance(ticker, period=period)
                 .to_dataframe()
                 .drop(["cik", "calendar_year"], axis=1)
             )
@@ -286,7 +286,7 @@ class FundamentalsCommands(commands.Cog):
         await ShowView().discord(
             inter, "balance",
             {
-                "title": f"{ticker} Balance", 
+                "title": f"{ticker} Balance",
                 "plots": fig.prepare_table(),
             }
         )
