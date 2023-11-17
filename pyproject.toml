@@ -12,6 +12,7 @@ plotly = "^5.16.1"
 openbb = "^4.0.0b0"
 pydantic-settings = "^2.1.0"
 pillow = "^10.1.0"
+openbb-charting = "^1.0.0b0"
 
 
 [tool.poetry.dev-dependencies]
