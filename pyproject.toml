@@ -9,7 +9,10 @@ python = ">=3.8,<3.12"
 disnake = "^2.4.0"
 pywry = "^0.6.0"
 plotly = "^5.16.1"
-openbb = "^4.0.0a0"
+openbb = "^4.0.0b0"
+pydantic-settings = "^2.1.0"
+pillow = "^10.1.0"
+openbb-charting = "^1.0.0b0"
 
 
 [tool.poetry.dev-dependencies]

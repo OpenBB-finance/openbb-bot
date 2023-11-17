@@ -24,11 +24,15 @@ class candlestickCommands(commands.Cog):
         ticker: str,
         interval: str = commands.Param(
             choices=[
-                "1day",
-                "15min",
-                "5min",
+                "1m",
+                "5m",
+                "15m",
+                "30m",
+                "1h",
+                "4h",
+                "1d",
             ],
-            default="1day",
+            default="1d",
         ),
         days: int = 200,
     ):
@@ -62,10 +66,10 @@ class candlestickCommands(commands.Cog):
             }
 
             # Get the data
-            data = obb.stocks.load(**params).chart.content
+            data = obb.equity.price.historical(**params).chart.content
 
             # Format for display
-            title = f"{ticker} {interval.replace('1day', 'Daily')}"
+            title = f"{ticker} {interval.replace('1d', 'Daily')}"
 
             fig = (
                 self.plot()
