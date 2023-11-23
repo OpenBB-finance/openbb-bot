@@ -2,6 +2,10 @@
 
 The [OpenBB Bot](http://my.openbb.co/app/bot) is a chatting bot that retrieves financial data on Discord and Telegram.
 
+<p align="center">
+    <img width="600px" src="https://github.com/OpenBB-finance/openbb-bot/assets/25267873/a99318c9-20c8-476b-8f8a-cfa326619fdf" />
+</p>
+
 If you want to use our hosted version which is 100% free, go to http://my.openbb.co/app/bot.
 
 Otherwise, the remainder of this document will explain how you can self-host our Discord bot.
