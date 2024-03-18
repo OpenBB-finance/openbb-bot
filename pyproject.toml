@@ -9,10 +9,10 @@ python = ">=3.8,<3.12"
 disnake = "^2.4.0"
 pywry = "^0.6.0"
 plotly = "^5.16.1"
-openbb = "^4.0.0b0"
 pydantic-settings = "^2.1.0"
 pillow = "^10.1.0"
-openbb-charting = "^1.0.0b0"
+openbb = "^4.1.4"
+openbb-charting = "^2.0.0"
 
 
 [tool.poetry.dev-dependencies]
@@ -28,7 +28,21 @@ target-version = "py38"
 # This is an introductory addition of ruff. We should look to adding:
 # D: pydocstyle, PD: pandas-vet
 # All options here: https://github.com/charliermarsh/ruff#supported-rules
-select = ["E", "W", "F", "Q", "S", "UP", "I", "PLC", "PLE", "PLR", "PLW", "SIM", "T20"]
+select = [
+    "E",
+    "W",
+    "F",
+    "Q",
+    "S",
+    "UP",
+    "I",
+    "PLC",
+    "PLE",
+    "PLR",
+    "PLW",
+    "SIM",
+    "T20",
+]
 # These ignores should be seen as temporary solutions to problems that will NEED fixed
 ignore = ["PLR2004", "PLR0913", "PLR0915"]
 
@@ -46,7 +60,7 @@ combine-as-imports = true
 force-wrap-aliases = true
 
 [tool.ruff.pylint]
-max-args=8
-max-branches=25
-max-returns=9
-max-statements=30
+max-args = 8
+max-branches = 25
+max-returns = 9
+max-statements = 30
