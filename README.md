@@ -10,7 +10,7 @@ If you want to use our hosted version which is 100% free, go to http://my.openbb
 
 Otherwise, the remainder of this document will explain how you can self-host our Discord bot.
 
-We have open source our framework so that users are able to build their own Discord bots. We are relying on the [OpenBB Platform](HTTP://my.openbb.co/app.sdk) and [Disnake](https://github.com/DisnakeDev/disnake).
+We have open source our framework so that users are able to build their own Discord bots. We are relying on the [OpenBB Platform](https://docs.openbb.co/platform) and [Disnake](https://github.com/DisnakeDev/disnake).
 
 ## Add your own OpenBB Bot to your server of interest
 
@@ -30,10 +30,10 @@ We have open source our framework so that users are able to build their own Disc
 1. Update and rename the `.env.example` file to `.env`
 2. In this `.env` file set `DISCORD_BOT_TOKEN` with the Token ID previously copied
 3. If you don't have an OpenBB Hub account, go to http://my.openbb.co
-5. Once you do go the [OpenBB SDK - PAT (personal access token) page](http://my.openbb.co/app/sdk/pat) and copy the PAT
+5. Once you do go the [OpenBB SDK - PAT (personal access token) page](https://my.openbb.co/app/platform/pat) and copy the PAT
 6. In the `.env` file set `OPENBB_HUB_PAT` with the PAT previously copied
 
-One of the reasons you rely on the OpenBB Hub PAT is that it manages all of your API keys on your behalf once you want to access data using OpenBB. So make sure you have your API keys set in http://my.openbb.co/sdk/api-keys.
+One of the reasons you rely on the OpenBB Hub PAT is that it manages all of your API keys on your behalf once you want to access data using OpenBB. So make sure you have API keys set on the [Credentials](https://my.openbb.co/app/platform/credentials) page.
 
 ## Run your own OpenBB Bot
 
